@@ -2,33 +2,47 @@
     const outputBox = document.getElementById('output');
     const changeButton = document.getElementById('changeButton');
     const textInput = document.getElementById('textInput');
-    let inputAccepted = false;
+    let step = 1;
 
     // Add event listener for the change button
     changeButton.addEventListener('click', function() {
-        if (!inputAccepted) {
-            // Allow input after first change button press
-            inputAccepted = true;
+        if (step === 1) {
+            // Step 1: User presses button after inputting option
             const value = textInput.value;
             outputBox.textContent = '';
 
-            if (value === '1' || value === '2') {
-                const checkbox = document.createElement('input');
-                checkbox.type = 'checkbox';
-                checkbox.id = `option${value}`;
+            if (value === '1' || value === '2' || value === '3') {
+                for (let i = 1; i <= 3; i++) {
+                    if (i !== parseInt(value)) {
+                        const checkbox = document.createElement('input');
+                        checkbox.type = 'checkbox';
+                        checkbox.id = `option${i}`;
+                        checkbox.value = i;
 
-                const label = document.createElement('label');
-                label.appendChild(checkbox);
-                label.appendChild(document.createTextNode(` option ${value}`));
+                        const label = document.createElement('label');
+                        label.appendChild(checkbox);
+                        label.appendChild(document.createTextNode(` option ${i}`));
 
-                outputBox.appendChild(label);
-                outputBox.appendChild(document.createElement('br'));
+                        outputBox.appendChild(label);
+                        outputBox.appendChild(document.createElement('br'));
+                    }
+                }
+                step = 2;
             }
-        } else {
-            // If checkbox is checked, display 'nice'
-            const checkbox = document.querySelector('input[type="checkbox"]');
-            if (checkbox && checkbox.checked) {
-                outputBox.textContent = 'nice';
+        } else if (step === 2) {
+            // Step 2: User presses button after selecting a checkbox
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            let selectedOption = null;
+            checkboxes.forEach((checkbox) => {
+                if (checkbox.checked) {
+                    selectedOption = checkbox.value;
+                }
+            });
+
+            if (selectedOption) {
+                textInput.value = selectedOption;
+                outputBox.textContent = '';
+                step = 1;
             }
         }
     });
